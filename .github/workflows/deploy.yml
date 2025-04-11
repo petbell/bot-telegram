@@ -11,26 +11,26 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
-            uses: actions/checkout@v4
+              uses: actions/checkout@v4
             - name: Set up Terraform
-            uses: hashicorp/setup-terraform@v3
-            with:
+              uses: hashicorp/setup-terraform@v3
+              with:
                 terraform_version: 1.5.0
             - name: Terraform Init
-            run: terraform init
-            working-directory: terraform
+              run: terraform init
+              working-directory: terraform
             - name: Terraform Plan
-            run: terraform plan -out=tfplan
+              run: terraform plan -out=tfplan
             - name: Terraform Apply
-            run: terraform apply -auto-approve tfplan -var="key-name=${{ secrets.AWS_KEY_NAME }}" -var="aws_secret_key=${{ secrets.AWS_PRIVATE_KEY }}"
+              run: terraform apply -auto-approve tfplan -var="key-name=${{ secrets.AWS_KEY_NAME }}" -var="aws_secret_key=${{ secrets.AWS_PRIVATE_KEY }}"
             - name: Get EC2 IP
-            id: ec2ip
-            run: |
+              id: ec2ip
+              run: |
                 echo "EC2_IP=$(terraform output -raw instance_ip)" >> $GITHUB_ENV
-            working-directory: terraform
+              working-directory: terraform
             - name: Deploy Docker Container via SSH
-            uses: appleboy/ssh-action@master
-            with:
+              uses: appleboy/ssh-action@master
+              with:
                 host: ${{ env.EC2_IP }}
                 username: ubuntu
                 key: ${{ secrets.EC2_PRIVATE_KEY }}

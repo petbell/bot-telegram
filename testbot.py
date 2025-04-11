@@ -16,7 +16,7 @@ async def echo(upd: Update, ctx: ContextTypes.DEFAULT_TYPE):
     
 
 async def start_survey (upd: Update, ctx):
-    await upd.message.reply_text("Please enter your name:")
+    await upd.message.reply_text("Good day. Please enter your name:")
     return NAME
 
 async def get_name(upd: Update, ctx):
