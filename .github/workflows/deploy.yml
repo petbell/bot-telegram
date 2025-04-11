@@ -45,3 +45,7 @@ jobs:
              #   with:
               #      python-version: '3.13'       
             
+
+
+              # amazon/ubuntu/images/hvm-ssd-gp3/ubuntu-oracular-24.10-amd64-server-202503270
+              # ami-0c1ac8a41498c1a9c
