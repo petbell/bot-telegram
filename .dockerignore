@@ -1,0 +1,42 @@
+# Python-specific
+**/__pycache__
+**/.venv
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# IDE/Editor
+**/.classpath
+**/.project
+**/.settings
+**/.toolstarget
+**/.vs
+**/.vscode
+**/*.*proj.user
+
+# Version Control
+**/.git
+**/.gitignore
+
+# Docker/Misc
+**/.dockerignore
+**/.env
+**/*.dbmdl
+**/*.jfm
+**/bin
+**/charts
+**/docker-compose*
+**/compose*
+**/Dockerfile*
+**/node_modules
+**/npm-debug.log
+**/obj
+**/secrets.dev.yaml
+**/values.dev.yaml
+
+# Terraform (explicitly ignored)
+**/terraform/
+
+# Root files (optional)
+LICENSE
+README.md
