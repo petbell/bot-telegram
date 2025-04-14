@@ -55,9 +55,36 @@ resource "aws_instance" "bot_server" {
   key_name = "gmailAWS"
   vpc_security_group_ids = ["${aws_security_group.ec2_sg1.id}"]
 
+user_data = <<-EOF
+              #!/bin/bash
+              # Update system and install Python
+              apt-get update -y
+              apt-get install -y python3 python3-pip git
+
+              # Clone the 'deploy' branch (replace with your repo)
+              git clone -b deploy https://github.com/petbell/bot-telegram.git /home/ubuntu/bot-telegram
+
+              # Create a virtual environment
+              python3 -m venv /home/ubuntu/venv
+              source /home/ubuntu/venv/bin/activate
+
+              # Install requirements (if any)
+              pip install --upgrade pip
+              #pip install -r https://raw.githubusercontent.com/petbell/bot-telegram/deploy/requirements.txt  # (Optional)
+              pip install -r /home/ubuntu/yourrepo/requirements.txt
+
+              # Clone your GitHub repo
+              #git clone https://github.com/petbell/bot-telegram.git /home/ubuntu/bot-telelgram
+
+              # Run your Python script (jidebot.py)
+              python3 /home/ubuntu/yourrepo/jidebot.py
+              EOF
+
   tags = {
     Name = "BotServerInstance"
   }
+
+  
 }
 
 output "bot_server_public_ip" {
@@ -71,3 +98,5 @@ output "bot_server_name" {
   description = "Name of the bot server instance"
   
 }
+
+
