@@ -17,28 +17,36 @@ def simulate(team1, team2):
     return winner
 
 def pair (teams):
-    fixtures = {}
     current_round = 1
+    fixtures = {}
     current_teams = teams.copy()
+    
     while len(current_teams) > 1 :
         round_name =  (f"Round {current_round}")
-        fixtures[round_name] = []
+        print (round_name)
+        fixtures[round_name] = {
+            'round_teams':current_teams.copy(),
+            'matches': []
+        }
         next_round_teams = []
-        print (random.shuffle(current_teams))
+        random.shuffle(current_teams)
+        print (f"Current teams are: {current_teams}")
         for i in range(0,len(current_teams), 2):
             if i+1 < len(current_teams):
                 team1, team2 = current_teams[i], current_teams[i+1]
                 winner = simulate(team1, team2)
-                fixtures[round_name].append(f"{team1} vs {team2} -> Winner: {winner}")
+                fixtures[round_name]['matches'].append(f"{team1} vs {team2} -> Winner: {winner}")
                 next_round_teams.append(winner)
             else:
                 next_round_teams.append(current_teams[i])
-                fixtures[round_name].append(f"{current_teams[i]} has a bye.")
+                fixtures[round_name]['matches'].append(f"{current_teams[i]} has a bye.")
         current_teams = next_round_teams
         current_round += 1
-    
+        print (f" Next round teams are: {next_round_teams}")
+        print (current_teams)
+        
     if current_teams:
-        fixtures["Champion"] = current_teams[0]
+        fixtures["Final"] = current_teams[0]
         return fixtures
         
 
@@ -60,25 +68,19 @@ async def handle_input(upd: Update, ctx: ContextTypes.DEFAULT_TYPE):
                 print (ctx.user_data['teams'])
     tournament = pair(teams)
     print(tournament)
-    for round_name, matches in tournament.items():
-        await upd.message.reply_text(f"{round_name}:")
-        if isinstance(matches,list):
-            for match in matches:
+    for round, round_data in tournament.items():
+        await upd.message.reply_text(f"{round}:")
+        if round == 'Final':
+            await upd.message.reply_text(f"Trophy Winner: {round_data}" )
+        else:
+            await upd.message.reply_text(f"Teams in this round: {', '.join(round_data['round_teams'])}") #use join to remove the list brackets
+            print (f"Teams in this round: {', '.join(round_data['round_teams'])}") #use join to remove the list brackets
+            if isinstance(round_data, dict):
+                for match in round_data['matches']:
+                    print(match)
                 await upd.message.reply_text(match)
                 await asyncio.sleep(1) # Optional: Add a delay between messages
-        else:
-            await upd.message.reply_text(f"Trophy Winner: {matches}" )
-                
-                
-            
-            
-
-        
- 
-        
-     
-         
-        
+           
 def main():
     application = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
 
